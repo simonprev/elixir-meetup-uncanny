@@ -1,0 +1,47 @@
+# Elixir baby!
+language: 'elixir'
+
+elixir: 1.8
+otp_release: 21.3.3
+
+# Make sure PostgreSQL is running
+addons:
+  postgresql: "10"
+  apt:
+    packages:
+      - postgresql-10
+      - postgresql-client-10
+
+# Use the cache to build faster
+cache:
+  directories:
+    - _build
+    - deps
+    - assets/node_modules
+    - priv/plts
+
+# Set global environment variables
+env:
+  global:
+    - MIX_ENV: test
+    - DATABASE_URL: postgres://uncanny:password@localhost:5433/uncanny_test
+    - PGPORT: 5433
+
+# Output Travis server IP for debugging
+before_install:
+  - echo `curl --verbose http://jsonip.com`
+  - sudo -u postgres psql -c "CREATE USER uncanny WITH PASSWORD 'password'"
+  - sudo -u postgres psql -c "ALTER ROLE uncanny SUPERUSER"
+
+# Install the node version we need, install the node packages,
+# create the database and prepare the application
+before_script:
+  - nvm install 10.14.2
+  - nvm use 10.14.2
+  - npm --prefix assets ci
+  - mix compile
+  - mix ecto.create
+  - mix ecto.migrate
+
+script:
+  - ./priv/scripts/ci-check.sh
