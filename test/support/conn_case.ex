@@ -16,9 +16,9 @@ defmodule UncannyWeb.ConnCase do
   use ExUnit.CaseTemplate
 
   alias Ecto.Adapters.SQL.Sandbox
+  alias Phoenix.ConnTest
   alias Uncanny.Repo
   alias UncannyWeb.Endpoint
-  alias Phoenix.ConnTest
 
   using do
     quote do
