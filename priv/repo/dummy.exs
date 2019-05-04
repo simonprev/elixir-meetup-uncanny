@@ -1,5 +1,12 @@
-# Script for populating the database with disposable, development-oriented data. You can run it as:
-#
-#     mix run priv/repo/dummy.exs
-#
-# We recommend using test factories here, since they already provide good sample data.
+alias Uncanny.Repo
+alias Uncanny.Identities.User
+
+# Users
+%User{}
+|> User.changeset(%{
+  name: "Admin",
+  email: "sprevost@mirego.com",
+  password: "testtest1234",
+  confirm_password: "testtest1234"
+})
+|> Repo.insert!()

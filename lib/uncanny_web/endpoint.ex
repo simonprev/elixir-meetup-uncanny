@@ -15,6 +15,9 @@ defmodule UncannyWeb.Endpoint do
   plug(:basic_auth)
   plug(:session)
 
+  plug(Pow.Plug.Session, otp_app: :uncanny)
+  plug(PowPersistentSession.Plug.Cookie)
+
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phoenix.digest

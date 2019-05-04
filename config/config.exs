@@ -16,6 +16,15 @@ config :uncanny, UncannyWeb.Endpoint,
   pubsub: [name: Uncanny.PubSub, adapter: Phoenix.PubSub.PG2],
   render_errors: [view: UncannyWeb.Errors.View, accepts: ~w(html json)]
 
+  # Authentication Pow
+config :uncanny, :pow,
+  user: Uncanny.Identities.User,
+  repo: Uncanny.Repo,
+  web_module: UncannyWeb,
+  cache_store_backend: UncannyWeb.Pow.EctoCache,
+  extensions: [PowPersistentSession]
+
+
 # Configure Gettext
 config :uncanny, Uncanny.Gettext, default_locale: "en"
 

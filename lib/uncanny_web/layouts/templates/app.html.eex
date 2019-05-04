@@ -10,8 +10,20 @@
 
   <body>
     <main role="main">
-      <p role="alert"><%= get_flash(@conn, :info) %></p>
-      <p role="alert"><%= get_flash(@conn, :error) %></p>
+      <%= if get_flash(@conn, :info) do %>
+        <div role="alert"><%= get_flash(@conn, :info) %></div>
+      <% end %>
+
+      <%= if get_flash(@conn, :error) do %>
+        <div role="alert"><%= get_flash(@conn, :error) %></div>
+      <% end %>
+
+      <%= if @conn.assigns[:current_user] do %>
+        Logged in as: <%= @conn.assigns[:current_user].name %>
+        <%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete %>
+      <% else %>
+        <%= link "Login", to: Routes.pow_session_path(@conn, :new) %>
+      <% end %>
 
       <%= render(@view_module, @view_template, assigns) %>
     </main>

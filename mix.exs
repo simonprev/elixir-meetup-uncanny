@@ -44,6 +44,9 @@ defmodule Uncanny.Mixfile do
       {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
       {:jason, "~> 1.0"},
 
+      # Auth
+      {:pow, "~> 1.0"},
+
       # Database
       {:ecto_sql, "~> 3.0"},
       {:postgrex, "~> 0.14"},

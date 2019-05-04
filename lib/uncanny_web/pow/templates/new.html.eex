@@ -1,0 +1,29 @@
+<div class="bg-light h-100 d-flex justify-content-center align-items-center">
+  <div class="card shadow-lg w-25 my-5">
+    <div class="card-body">
+      <h1><%= localize_message("login.title")  %></h1>
+
+      <%= form_for @changeset, @action, [as: :user], fn form -> %>
+        <%= if @changeset.action do %>
+          <div class="alert alert-danger">
+            <p><%= localize_message("login.error") %></p>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= label form, localize_message("login.#{@changeset.data.__struct__.pow_user_id_field()}")  %>
+          <%= text_input form, @changeset.data.__struct__.pow_user_id_field(), class: "form-control", type: "email" %>
+        </div>
+
+        <div class="form-group">
+          <%= label form, localize_message("login.password")  %>
+          <%= text_input form, :password, class: "form-control", type: "password" %>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <%= submit localize_message("login.submit"), class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
