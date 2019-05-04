@@ -21,7 +21,9 @@ config :uncanny, UncannyWeb.Endpoint,
       ~r{priv/gettext/.*$},
       ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
       ~r{lib/uncanny_web/views/.*(ex)$},
-      ~r{lib/uncanny_web/templates/.*(eex)$}
+      ~r{lib/uncanny_web/templates/.*(eex)$},
+      ~r{lib/uncanny_web/templates/.*(leex)$},
+      ~r{lib/uncanny_web/live/.*(ex)$}
     ]
   ]
 

@@ -59,6 +59,9 @@ config :uncanny, UncannyWeb.Endpoint,
     host: Environment.get("STATIC_URL_HOST"),
     port: Environment.get("STATIC_URL_PORT")
   ],
+  live_view: [
+    signing_salt: Environment.get("SIGNING_SALT")
+  ],
   url: [scheme: scheme, host: host, port: port]
 
 # Configure Basic Auth

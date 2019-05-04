@@ -2,6 +2,7 @@ defmodule UncannyWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :uncanny
   use Sentry.Phoenix.Endpoint
 
+  socket "/live", Phoenix.LiveView.Socket
   socket(
     "/socket",
     UncannyWeb.Socket,
