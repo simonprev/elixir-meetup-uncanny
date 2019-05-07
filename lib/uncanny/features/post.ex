@@ -6,6 +6,8 @@ defmodule Uncanny.Features.Post do
     field(:description, :string)
     field(:title, :string)
     belongs_to(:user, Uncanny.Identities.User)
+    has_many(:votes, Uncanny.Features.Vote)
+    field(:votes_score, :integer, virtual: true)
 
     timestamps()
   end

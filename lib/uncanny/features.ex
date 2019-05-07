@@ -6,7 +6,7 @@ defmodule Uncanny.Features do
   import Ecto.Query, warn: false
   alias Uncanny.Repo
 
-  alias Uncanny.Features.Post
+  alias Uncanny.Features.{Post, Vote}
 
   @doc """
   Returns the list of posts.
@@ -19,6 +19,26 @@ defmodule Uncanny.Features do
   """
   def list_posts do
     Repo.all(Post)
+  end
+
+  def merge_votes(posts) do
+    ids = Enum.map(posts, & &1.id)
+
+    votes =
+      from(votes in Vote, group_by: votes.post_id, select: {votes.post_id, sum(votes.vote)}, where: votes.post_id in ^ids)
+      |> Repo.all()
+      |> Map.new(& &1)
+
+    posts = Map.new(posts, &{&1.id, &1})
+
+    Enum.reduce(votes, posts, fn {post_id, vote}, posts ->
+      update_in(posts, [post_id], fn
+        nil -> nil
+        post -> %{post | votes_score: vote}
+      end)
+    end)
+    |> Map.values()
+    |> Enum.reject(&is_nil/1)
   end
 
   @doc """
