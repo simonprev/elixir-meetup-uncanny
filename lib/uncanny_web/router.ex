@@ -25,7 +25,7 @@ defmodule UncannyWeb.Router do
   scope "/", UncannyWeb do
     pipe_through(:browser)
 
-    get("/", Home.Controller, :index, as: :home)
+    get("/", Features.Posts.Controller, :index, as: :home)
     resources("/posts", Features.Posts.Controller, as: :post)
   end
 end
