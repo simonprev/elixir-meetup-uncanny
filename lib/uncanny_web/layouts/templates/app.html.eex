@@ -19,6 +19,10 @@
       <% end %>
 
       <%= if @conn.assigns[:current_user] do %>
+        <%= live_render @conn, UncannyWeb.Layouts.Live.NotificationCenter, session: %{current_user_id: @conn.assigns[:current_user].id} %>
+      <% end %>
+
+      <%= if @conn.assigns[:current_user] do %>
         Logged in as: <%= @conn.assigns[:current_user].name %>
         <%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete %>
       <% else %>

@@ -3,6 +3,7 @@ defmodule UncannyWeb.Layouts.View do
   use Phoenix.HTML
 
   import Phoenix.Controller, only: [get_flash: 2]
+  import Phoenix.LiveView
 
   alias UncannyWeb.Router.Helpers, as: Routes
 end

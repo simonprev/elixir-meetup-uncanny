@@ -30,6 +30,16 @@ defmodule UncannyWeb.Features.Posts.Controller do
 
     case Features.create_post(post_params) do
       {:ok, post} ->
+        Phoenix.PubSub.broadcast(
+          Uncanny.PubSub,
+          "notifications",
+          %UncannyWeb.Notification{
+            id: Ecto.UUID.generate(),
+            text: "New post! #{post.title}",
+            author_id: post.user_id
+          }
+        )
+
         conn
         |> put_flash(:info, "Post created successfully.")
         |> redirect(to: Routes.post_path(conn, :show, post))
