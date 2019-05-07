@@ -10,26 +10,40 @@
 
   <body>
     <main role="main">
-      <%= if get_flash(@conn, :info) do %>
-        <div role="alert"><%= get_flash(@conn, :info) %></div>
-      <% end %>
+      <div class="position-absolute" style="z-index: 1; top: 10px; left: 10px">
+        <%= if get_flash(@conn, :info) do %>
+          <div class="alert alert-success" role="alert"><%= get_flash(@conn, :info) %></div>
+        <% end %>
 
-      <%= if get_flash(@conn, :error) do %>
-        <div role="alert"><%= get_flash(@conn, :error) %></div>
-      <% end %>
+        <%= if get_flash(@conn, :error) do %>
+          <div class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></div>
+        <% end %>
 
-      <%= if @conn.assigns[:current_user] do %>
-        <%= live_render @conn, UncannyWeb.Layouts.Live.NotificationCenter, session: %{current_user_id: @conn.assigns[:current_user].id} %>
-      <% end %>
+        <%= if @conn.assigns[:current_user] do %>
+            <%= live_render @conn, UncannyWeb.Layouts.Live.NotificationCenter, session: %{current_user_id: @conn.assigns[:current_user].id} %>
+        <% end %>
+      </div>
 
-      <%= if @conn.assigns[:current_user] do %>
-        Logged in as: <%= @conn.assigns[:current_user].name %>
-        <%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete %>
-      <% else %>
-        <%= link "Login", to: Routes.pow_session_path(@conn, :new) %>
-      <% end %>
+      <nav class="navbar navbar-light justify-content-between bg-light mb-5">
+        <div class="container">
+          <a class="navbar-brand" href="/">
+            Uncanny
+          </a>
 
-      <%= render(@view_module, @view_template, assigns) %>
+          <div class="d-flex align-items-center text-muted">
+            <%= if @conn.assigns[:current_user] do %>
+              Logged in as: <%= @conn.assigns[:current_user].name %>
+              <%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete, class: "ml-2 btn btn-outline-danger btn-sm" %>
+            <% else %>
+              <%= link "Login", to: Routes.pow_session_path(@conn, :new) %>
+            <% end %>
+          </div>
+        </div>
+      </nav>
+
+      <div class="container">
+        <%= render(@view_module, @view_template, assigns) %>
+      </div>
     </main>
 
     <script type="text/javascript" src="<%= Routes.static_url(@conn, "/js/app.js") %>"></script>

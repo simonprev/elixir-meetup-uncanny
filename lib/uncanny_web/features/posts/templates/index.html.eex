@@ -1,37 +1,28 @@
-<h1>Listing Posts</h1>
+<%= if can?(@conn.assigns[:current_user], :create_post, %{}) do %>
+  <div class="d-flex justify-content-end">
+    <span><%= link "New Post", to: Routes.post_path(@conn, :new), class: "btn btn-primary" %></span>
+  </div>
+<% end %>
 
-<table>
-  <thead>
-    <tr>
-      <th></th>
-      <th>Title</th>
-      <th>Description</th>
+<ul>
+ <%= for post <- @posts do %>
+  <li class="d-flex mb-4 align-items-start">
+    <div class="mr-3 border rounded">
+      <%= live_render @conn,  UncannyWeb.Features.Posts.Live.Votes, session: %{user_votes: @user_votes, post: post, user: @conn.assigns[:current_user]} %>
+    </div>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for post <- @posts do %>
-    <tr>
-      <td><%= live_render @conn,  UncannyWeb.Features.Posts.Live.Votes, session: %{score: post.votes_score} %></td>
-      <td><%= post.title %></td>
-      <td><%= post.description %></td>
-
-      <td>
-        <%= link "Show", to: Routes.post_path(@conn, :show, post) %>
-
+    <div>
+      <strong class="mb-0"><%= link post.title, to: Routes.post_path(@conn, :show, post), class: "text-dark" %></strong>
+      <div class="small mb-2">
         <%= if can?(@conn.assigns[:current_user], :update_post, post) do %>
           <%= link "Edit", to: Routes.post_path(@conn, :edit, post) %>
         <% end %>
         <%= if can?(@conn.assigns[:current_user], :delete_post, post) do %>
           <%= link "Delete", to: Routes.post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"] %>
         <% end %>
-      </td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
-
-<%= if can?(@conn.assigns[:current_user], :create_post, %{}) do %>
-  <span><%= link "New Post", to: Routes.post_path(@conn, :new) %></span>
-<% end %>
+      </div>
+      <p><%= post.description %></p>
+    </div>
+  </li>
+ <% end %>
+</ul>

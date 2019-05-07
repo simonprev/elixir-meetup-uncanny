@@ -11,4 +11,12 @@ defimpl Uncanny.Permissions, for: Uncanny.Identities.User do
   def can?(user, :delete_post, post) do
     user.id === post.user_id
   end
+
+  def can?(user, :increment_post_vote, {post, existing_votes}) do
+    Map.get(existing_votes, post.id) !== 1
+  end
+
+  def can?(user, :decrement_post_vote, {post, existing_votes}) do
+    Map.get(existing_votes, post.id) !== -1
+  end
 end

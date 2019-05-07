@@ -1,21 +1,32 @@
-<h1>Show Post</h1>
+<div class="d-flex">
+  <div class="bg-light rounded py-2 px-3 w-25 mr-5">
+    <strong class="text-muted text-uppercase small">Voters</strong>
 
-<ul>
+    <ul>
+      <%= for voter <- @voters do %>
+        <li><%= voter.name %></li>
+      <% end %>
+    </ul>
+  </div>
 
-  <li>
-    <strong>Title:</strong>
-    <%= @post.title %>
-  </li>
+  <div class="d-flex align-items-start">
+    <div class="mr-3 border rounded">
+      <%= live_render @conn,  UncannyWeb.Features.Posts.Live.Votes, session: %{user_votes: @user_votes, post: @post, user: @conn.assigns[:current_user]} %>
+    </div>
 
-  <li>
-    <strong>Description:</strong>
-    <%= @post.description %>
-  </li>
+    <div>
+      <h2><%= @post.title %></h2>
+      <div>
+        <strong><%= @post.user.name %></strong>
+      </div>
 
-</ul>
+      <div class="small">
+        <%= if can?(@conn.assigns[:current_user], :update_post, @post) do %>
+          <span><%= link "Edit", to: Routes.post_path(@conn, :edit, @post) %></span>
+        <% end %>
+      </div>
 
-<%= if can?(@conn.assigns[:current_user], :update_post, @post) do %>
-  <span><%= link "Edit", to: Routes.post_path(@conn, :edit, @post) %></span>
-<% end %>
-
-<span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>
+      <p><%= @post.description %></p>
+    </div>
+  </div>
+</div>

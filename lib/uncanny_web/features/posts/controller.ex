@@ -17,7 +17,14 @@ defmodule UncannyWeb.Features.Posts.Controller do
       Features.list_posts()
       |> Features.merge_votes()
 
-    render(conn, "index.html", posts: posts)
+    user_votes =
+      if conn.assigns[:current_user] do
+        Features.post_votes_for_user(posts, conn.assigns[:current_user])
+      else
+        %{}
+      end
+
+    render(conn, "index.html", posts: posts, user_votes: user_votes)
   end
 
   def new(conn, _params) do
@@ -51,7 +58,18 @@ defmodule UncannyWeb.Features.Posts.Controller do
 
   def show(conn, %{"id" => id}) do
     post = conn.assigns[:resource]
-    render(conn, "show.html", post: post)
+    post = Features.post_with_user(post)
+    [post] = Features.merge_votes([post])
+    voters = Features.post_voters(post)
+
+    user_votes =
+      if conn.assigns[:current_user] do
+        Features.post_votes_for_user([post], conn.assigns[:current_user])
+      else
+        %{}
+      end
+
+    render(conn, "show.html", post: post, user_votes: user_votes, voters: voters)
   end
 
   def edit(conn, %{"id" => id}) do

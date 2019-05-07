@@ -6,7 +6,7 @@ defmodule Uncanny.Features do
   import Ecto.Query, warn: false
   alias Uncanny.Repo
 
-  alias Uncanny.Features.{Post, Vote}
+  alias Uncanny.Features.{Post, Vote, Voter}
 
   @doc """
   Returns the list of posts.
@@ -19,6 +19,54 @@ defmodule Uncanny.Features do
   """
   def list_posts do
     Repo.all(Post)
+  end
+
+  def post_voters(post) do
+    from(voters in Voter, join: posts in assoc(voters, :post), where: posts.id == ^post.id)
+    |> Repo.all()
+  end
+
+  def increment_post_vote(post, user) do
+    update_post_vote(%{
+      post_id: post.id,
+      user_id: user.id,
+      vote: 1
+    })
+  end
+
+  def decrement_post_vote(post, user) do
+    update_post_vote(%{
+      post_id: post.id,
+      user_id: user.id,
+      vote: -1
+    })
+  end
+
+  def update_post_vote(vote) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    vote =
+      Map.merge(
+        %{
+          inserted_at: now,
+          updated_at: now
+        },
+        vote
+      )
+
+    Repo.insert_all(Vote, [vote], on_conflict: {:replace, ~w(vote updated_at)a}, conflict_target: ~w(user_id post_id)a)
+  end
+
+  def post_with_user(post) do
+    Repo.preload(post, :user)
+  end
+
+  def post_votes_for_user(posts, user) do
+    ids = Enum.map(posts, & &1.id)
+
+    from(votes in Vote, select: {votes.post_id, votes.vote}, where: votes.post_id in ^ids and votes.user_id == ^user.id)
+    |> Repo.all()
+    |> Map.new(& &1)
   end
 
   def merge_votes(posts) do

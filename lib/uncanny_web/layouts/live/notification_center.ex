@@ -3,11 +3,12 @@ defmodule UncannyWeb.Layouts.Live.NotificationCenter do
 
   def render(assigns) do
     ~L"""
-    <ul>
+    <ul class="mb-0">
     <%= for notification <- @notifications do %>
-      <li>
-        <button phx-click="close" phx-value="<%= notification.id %>">Close</button>
+      <li class="alert alert-secondary">
         <%= notification.text %>
+
+        <button class="btn btn-outline-danger btn-sm border-0" phx-click="close" phx-value="<%= notification.id %>">×</button>
       </li>
     <% end %>
     </ul>
@@ -29,7 +30,7 @@ defmodule UncannyWeb.Layouts.Live.NotificationCenter do
   end
 
   def handle_event("close", id, socket) do
-    notifications = Enum.reject(socket.assigns[:notifications], & &1.id === id)
+    notifications = Enum.reject(socket.assigns[:notifications], &(&1.id === id))
     {:noreply, assign(socket, :notifications, notifications)}
   end
 end
