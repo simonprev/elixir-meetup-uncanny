@@ -17,12 +17,19 @@
 
       <td>
         <%= link "Show", to: Routes.post_path(@conn, :show, post) %>
-        <%= link "Edit", to: Routes.post_path(@conn, :edit, post) %>
-        <%= link "Delete", to: Routes.post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"] %>
+
+        <%= if can?(@conn.assigns[:current_user], :update_post, post) do %>
+          <%= link "Edit", to: Routes.post_path(@conn, :edit, post) %>
+        <% end %>
+        <%= if can?(@conn.assigns[:current_user], :delete_post, post) do %>
+          <%= link "Delete", to: Routes.post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"] %>
+        <% end %>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Post", to: Routes.post_path(@conn, :new) %></span>
+<%= if can?(@conn.assigns[:current_user], :create_post, %{}) do %>
+  <span><%= link "New Post", to: Routes.post_path(@conn, :new) %></span>
+<% end %>

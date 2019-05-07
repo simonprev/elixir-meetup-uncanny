@@ -2,7 +2,7 @@ defmodule Uncanny.Repo.Migrations.CreateUserCredentials do
   use Ecto.Migration
 
   def change do
- create table(:user_credentials) do
+    create table(:user_credentials) do
       add(:user_id, references(:users), null: false)
       add(:namespace, :string, null: false)
       add(:key, :string, null: false)

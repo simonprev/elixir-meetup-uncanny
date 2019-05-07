@@ -14,5 +14,8 @@
 
 </ul>
 
-<span><%= link "Edit", to: Routes.post_path(@conn, :edit, @post) %></span>
+<%= if can?(@conn.assigns[:current_user], :update_post, @post) do %>
+  <span><%= link "Edit", to: Routes.post_path(@conn, :edit, @post) %></span>
+<% end %>
+
 <span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>

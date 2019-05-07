@@ -35,9 +35,9 @@ defmodule UncannyWeb.Errors.Helpers do
     # should be written to the errors.po file. The :count option is
     # set by Ecto and indicates we should also apply plural rules.
     if count = opts[:count] do
-      Gettext.dngettext(UncannyWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(Uncanny.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(UncannyWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(Uncanny.Gettext, "errors", msg, opts)
     end
   end
 end

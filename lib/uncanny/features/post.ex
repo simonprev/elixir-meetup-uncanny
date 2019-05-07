@@ -3,8 +3,9 @@ defmodule Uncanny.Features.Post do
   import Ecto.Changeset
 
   schema "posts" do
-    field :description, :string
-    field :title, :string
+    field(:description, :string)
+    field(:title, :string)
+    belongs_to(:user, Uncanny.Identities.User)
 
     timestamps()
   end
@@ -12,7 +13,8 @@ defmodule Uncanny.Features.Post do
   @doc false
   def changeset(post, attrs) do
     post
-    |> cast(attrs, [:title, :description])
-    |> validate_required([:title, :description])
+    |> cast(attrs, [:title, :description, :user_id])
+    |> validate_required([:title, :description, :user_id])
+    |> foreign_key_constraint(:user_id)
   end
 end

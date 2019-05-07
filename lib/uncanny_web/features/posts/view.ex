@@ -3,6 +3,7 @@ defmodule UncannyWeb.Features.Posts.View do
   use Phoenix.HTML
 
   import UncannyWeb.Errors.Helpers
+  import Uncanny.Permissions, only: [can?: 3]
 
   alias UncannyWeb.Router.Helpers, as: Routes
 end

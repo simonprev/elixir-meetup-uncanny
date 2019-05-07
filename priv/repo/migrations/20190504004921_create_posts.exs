@@ -3,8 +3,8 @@ defmodule Uncanny.Repo.Migrations.CreatePosts do
 
   def change do
     create table(:posts) do
-      add :title, :string, null: false
-      add :description, :string, null: false
+      add(:title, :string, null: false)
+      add(:description, :string, null: false)
 
       timestamps()
     end
