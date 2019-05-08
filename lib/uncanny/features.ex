@@ -22,8 +22,7 @@ defmodule Uncanny.Features do
   end
 
   def post_voters(post) do
-    from(voters in Voter, join: posts in assoc(voters, :post), where: posts.id == ^post.id)
-    |> Repo.all()
+    Repo.all(from(voters in Voter, join: posts in assoc(voters, :post), where: posts.id == ^post.id))
   end
 
   def increment_post_vote(post, user) do
@@ -43,7 +42,7 @@ defmodule Uncanny.Features do
   end
 
   def update_post_vote(vote) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 
     vote =
       Map.merge(
@@ -71,15 +70,12 @@ defmodule Uncanny.Features do
 
   def merge_votes(posts) do
     ids = Enum.map(posts, & &1.id)
-
-    votes =
-      from(votes in Vote, group_by: votes.post_id, select: {votes.post_id, sum(votes.vote)}, where: votes.post_id in ^ids)
-      |> Repo.all()
-      |> Map.new(& &1)
-
     posts = Map.new(posts, &{&1.id, &1})
 
-    Enum.reduce(votes, posts, fn {post_id, vote}, posts ->
+    from(votes in Vote, group_by: votes.post_id, select: {votes.post_id, sum(votes.vote)}, where: votes.post_id in ^ids)
+    |> Repo.all()
+    |> Map.new(& &1)
+    |> Enum.reduce(posts, fn {post_id, vote}, posts ->
       update_in(posts, [post_id], fn
         nil -> nil
         post -> %{post | votes_score: vote}

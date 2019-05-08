@@ -13,9 +13,7 @@ defmodule UncannyWeb.Features.Posts.Controller do
   plug(PlugEnsure, {:delete_post, ["id"], &Features.get_post!/1} when action === :delete)
 
   def index(conn, _params) do
-    posts =
-      Features.list_posts()
-      |> Features.merge_votes()
+    posts = Features.merge_votes(Features.list_posts())
 
     user_votes =
       if conn.assigns[:current_user] do
