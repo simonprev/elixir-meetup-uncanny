@@ -21,7 +21,7 @@
           <%= link "Delete", to: Routes.post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"] %>
         <% end %>
       </div>
-      <p><%= post.description %></p>
+      <p class="text-muted small"><%= post.description %></p>
     </div>
   </li>
  <% end %>
